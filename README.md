@@ -10,5 +10,5 @@ go run main.go
 Example of request:
 
 ```
-    curl -X POST -d '{"urls": ["http://localhost:10007/", "http://example.com"]}' http://localhost:10007/check_urls
+curl -X POST -d '{"urls": ["http://localhost:10007/", "http://example.com"]}' http://localhost:10007/check_urls
 ```

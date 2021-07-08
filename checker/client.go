@@ -24,19 +24,19 @@ func Query(links []string) map[string]int {
 	wg := sync.WaitGroup{}
 	limiter := make(chan struct{}, parallelLimit)
 
+	wg.Add(len(links))
 	for _, link := range links {
 		if !c.ValidLink(link) {
 			continue
 		}
 
-		wg.Add(1)
 		limiter <- struct{}{}
 
-		go func(link string) {
+		go func() {
 			c.fetchStatusCode(link)
 			wg.Done()
 			<-limiter
-		}(link)
+		}()
 	}
 	wg.Wait()
 

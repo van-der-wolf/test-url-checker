@@ -15,6 +15,7 @@ type checker struct {
 }
 
 const (
+	attemptsCount = 5
 	timeout       = 10 * time.Second
 	parallelLimit = 100
 )
@@ -72,11 +73,11 @@ func (c *checker) GetCodes() map[string]int { return c.responseCodes }
 
 func (c *checker) fetchStatusCode(link string) {
 	request := buildRequest(link)
-	for i := 1; i <= 5; i++ {
+	for i := 0; i < attemptsCount; i++ {
 		response, err := (&http.Client{
 			Transport: &http.Transport{
 				DisableKeepAlives:     true,
-				IdleConnTimeout:       time.Second,
+				IdleConnTimeout:       timeout,
 				ResponseHeaderTimeout: timeout,
 			},
 			Timeout: timeout,
@@ -85,9 +86,11 @@ func (c *checker) fetchStatusCode(link string) {
 			log.Printf("Request error: %s", err)
 			continue
 		}
+
 		c.m.Lock()
 		c.responseCodes[link] = response.StatusCode
 		c.m.Unlock()
+
 		_ = response.Body.Close()
 		break
 	}

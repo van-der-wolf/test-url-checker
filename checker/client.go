@@ -95,10 +95,5 @@ func (c *checker) fetchStatusCode(link string) {
 
 func buildRequest(link string) *http.Request {
 	req, _ := http.NewRequest("GET", link, nil)
-	req.Header.Add("DNT", "1")
-	req.Header.Add("Cache-Control", "no-cache")
-	req.Header.Add("Accept-Language", "en-US,en-GB;q=0.9,en;q=0.8,uk;q=0.7")
-	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3")
-	req.Header.Add("Pragma", "no-cache")
 	return req
 }

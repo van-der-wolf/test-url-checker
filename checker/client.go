@@ -25,16 +25,16 @@ func Query(links []string) map[string]int {
 	wg := sync.WaitGroup{}
 	limiter := make(chan struct{}, parallelLimit)
 
-	wg.Add(len(links))
+	//wg.Add(len(links))
 	for _, link := range links {
 		if !c.ValidLink(link) {
 			continue
 		}
-
+		wg.Add(1)
 		limiter <- struct{}{}
-
+		a := link
 		go func() {
-			c.fetchStatusCode(link)
+			c.fetchStatusCode(a)
 			wg.Done()
 			<-limiter
 		}()
@@ -66,6 +66,7 @@ func (c *checker) setURLs(links []string) {
 
 func (c *checker) ValidLink(link string) bool {
 	_, ok := c.urls[link]
+
 	return ok
 }
 

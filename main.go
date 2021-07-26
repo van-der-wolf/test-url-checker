@@ -61,6 +61,7 @@ func CheckURLs(rw http.ResponseWriter, r *http.Request) {
 
 	resp := &protocol.ProfileResponse{URLCodes: checker.Query(req.URLs)}
 
+	rw.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(rw).Encode(resp); err != nil {
 		log.Printf("failed to marshal response: %s", err)
 	}
